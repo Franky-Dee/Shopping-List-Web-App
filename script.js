@@ -47,8 +47,11 @@ function createIcon(classes) {
 
 function removeItem(e) {
     if (e.target.parentElement.classList.contains('remove-item')) {
-        e.target.parentElement.parentElement.remove();
+        if (confirm('Are you sure you want to remove the item from your shopping list?')) {
+            e.target.parentElement.parentElement.remove();
+        }
     }
+    checkUI();
 }
 
 function clearItems() {
@@ -56,6 +59,21 @@ function clearItems() {
         itemList.removeChild(itemList.firstChild);
     }
     checkUI();
+}
+
+function filterItems(e) {
+    const items = itemList.querySelectorAll('li');
+    const text = e.target.value.toLowerCase();
+
+    items.forEach((item) => {
+        const itemName = item.firstChild.textContent.toLowerCase();
+
+        if (itemName.indexOf(text) != -1) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    })
 }
 
 function checkUI() {
@@ -73,5 +91,6 @@ function checkUI() {
 itemForm.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeItem);
 clearButton.addEventListener('click', clearItems);
+itemFilter.addEventListener('input', filterItems);
 
 checkUI();
